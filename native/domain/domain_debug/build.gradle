@@ -1,0 +1,11 @@
+apply from: "${project.rootDir}/native/domain/domain.gradle"
+
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation project(':native:domain:domain_release')
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
+
+apply from: "${project.rootDir}/android/android.gradle"
+
+android {
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation project(':native:domain:domain_release')
+    debugImplementation project(':native:domain:domain_debug')
+
+    implementation appCompat
+    implementation constraintLayout
+    implementation kodein
+    implementation kodeinAndroid
+    implementation navigationFragment
+    implementation navigationUi
+    implementation navigationFragmentKtx
+    implementation navigationUiKtx
+    implementation lifecycleExtensions
+    implementation lifecycleViewModel
+    implementation lifecycleLiveData
+    implementation coroutines
+}

@@ -1,0 +1,4 @@
+apply from: "${project.rootDir}/native/native.gradle"
+
+kotlin {
+}

@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+apply from: "${project.rootDir}/android/android.gradle"
+
+
+android {
+    defaultConfig {
+        applicationId "com.nc.base"
+        multiDexEnabled true
+    }
+    bundle {
+        density.enableSplit = true
+        abi.enableSplit = true
+        language.enableSplit = false
+    }
+    productFlavors {
+        prod {
+        }
+        qa {
+            versionNameSuffix "-qa"
+            applicationIdSuffix '.qa'
+        }
+        dev {
+            versionNameSuffix "-dev"
+            applicationIdSuffix '.dev'
+        }
+        stg {
+            versionNameSuffix "-stg"
+            applicationIdSuffix '.stg'
+        }
+    }
+    sourceSets {
+        debug.java.srcDirs += 'src/debug/kotlin'
+    }
+    dataBinding {
+        enabled = true
+    }
+    dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
+        javaMaxHeapSize "3g"
+    }
+}
+
+dependencies {
+    implementation project(':android:presentation')
+    implementation project(':native:di:di_release')
+    implementation project(':native:domain:domain_release')
+    debugImplementation project(':native:di:di_debug')
+
+    implementation appCompat
+    implementation kodein
+    implementation kodeinAndroid
+    implementation coroutines
+    implementation coroutinesAndroid
+}

@@ -1,0 +1,10 @@
+enableFeaturePreview("GRADLE_METADATA")
+
+include ':android:app',
+        ':android:presentation',
+        ':native:domain:domain_release',
+        ':native:domain:domain_debug',
+        ':native:infra:infra_release',
+        ':native:infra:infra_debug',
+        ':native:di:di_release',
+        ':native:di:di_debug'

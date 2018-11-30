@@ -1,0 +1,77 @@
+apply plugin: "kotlin-multiplatform"
+
+ext {
+    coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
+    coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    coroutinesiOS = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesVersion"
+
+    kodein = "org.kodein.di:kodein-di-erased:$kodeinVersion"
+    kodeinAndroid = "org.kodein.di:kodein-di-core:$kodeinVersion"
+    kodeiniOS = "org.kodein.di:kodein-di-erased:$kodeinVersion"
+
+    ktorVersion = '1.0.0'
+    ktor = "io.ktor:ktor-client:$ktorVersion"
+    ktorAndroid = "io.ktor:ktor-client-android:$ktorVersion"
+    ktoriOS = "io.ktor:ktor-client-ios:$ktorVersion"
+}
+
+kotlin {
+    sourceSets {
+        targets {
+            fromPreset(presets.jvm, 'android')
+            fromPreset(presets.iosArm64, 'iosArm64')
+            fromPreset(presets.iosX64, 'iosX64')
+
+            configure([iosArm64, iosX64]) {
+                compilations.main {
+                    outputKinds += FRAMEWORK
+                }
+            }
+        }
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation kodein
+                implementation coroutines
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation coroutinesAndroid
+                implementation kodeinAndroid
+            }
+        }
+        iosMain {
+            dependencies {
+                implementation coroutinesiOS
+                implementation kodeiniOS
+            }
+        }
+        iosArm64Main {
+            dependsOn iosMain
+        }
+        iosX64Main {
+            dependsOn iosMain
+        }
+    }
+}
+
+// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}
+
+/*
+afterEvaluate {
+    [linkReleaseFrameworkIosArm64, linkDebugFrameworkIosArm64,
+     linkReleaseFrameworkIosX64, linkDebugFrameworkIosX64].forEach { task ->
+        task.doFirst {
+            def target = compilation.target.disambiguationClassifier
+            def buildType = compilation.buildTypes.find{ it.debuggable == debuggable }.name.toLowerCase()
+            compilation.extraOpts '-o', new File(buildDir, "bin/$target/${compilation.name}/$buildType/framework/${ios_framework_name}.framework").absolutePath
+        }
+        task.doLast {
+            compilation.extraOpts.clear()
+        }
+    }
+}*/

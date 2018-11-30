@@ -1,0 +1,14 @@
+apply plugin: 'kotlin-multiplatform'
+apply from: "${project.rootDir}/native/native.gradle"
+
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                api project(':native:domain:domain_release')
+
+                implementation project(':native:infra:infra_release')
+            }
+        }
+    }
+}

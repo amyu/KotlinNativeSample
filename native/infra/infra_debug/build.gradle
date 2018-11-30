@@ -1,0 +1,13 @@
+apply from: "${project.rootDir}/native/infra/infra.gradle"
+
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation project(':native:domain:domain_debug')
+                implementation project(':native:domain:domain_release')
+                implementation project(':native:infra:infra_release')
+            }
+        }
+    }
+}
